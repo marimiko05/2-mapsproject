@@ -86,12 +86,29 @@ tiles_dictionary = {
 
 #кнопка выбора тайла на матрице
 
-# def choosetileonmatrix():
-#     print("position:")
-
+def choosetileonmatrix(event):
+    global position
+    position = event.widget.cget("text")
+    
 #кнопка выбора тайла с картинкой
-def choosetile():
+def choosetile(t):
+    global chosentile
+    chosentile = t
+    print(chosentile)
+
+def modifymap():
     print("!")
+
+    try:
+        print(type(position))
+        print(type(chosentile))
+    except:
+        error2()
+
+    # else:
+        
+
+
 #кнопка выбора тайла
 def radiobuttonselector(dictionary, key1, window):
     try:
@@ -103,10 +120,14 @@ def radiobuttonselector(dictionary, key1, window):
             icon = PhotoImage(file=dictionary[key1][i][0])
             tilecode = dictionary[key1][i][1]
             radiobutton = Radiobutton(window,
+                                      text=tilecode,
                                   variable = user_choice_tile,
                                   value=tilecode,
+                                  command= lambda t=tilecode: choosetile(t),
                                   image=icon)
+            
             radiobutton.pack(anchor=W)
+            # radiobutton.bind("<Button>", lambda event: print(event.widget.cget("text")))
             radiobutton.image = icon
     
     except Exception as e:
@@ -114,16 +135,20 @@ def radiobuttonselector(dictionary, key1, window):
 
     selecttilebutton = Button(window,
                               text = "Выбрать тайл",
-                              #command=choosetile,
+                              command=modifymap,
                               font = ("Pixelify Sans",20),
                               state = ACTIVE,
                               compound = 'left')
     selecttilebutton.pack()
 
 
-def error1():
+def error1(): 
     #диалоговое окно показывающее ошибку
     messagebox.showerror(title="Ошибка!", message="Введите данные в корректном формате")
+
+def error2():
+    #диалоговое окно показывающее ошибку
+    messagebox.showerror(title="Ошибка!", message="Выберите тайлы и(или) его позицию")
 
 def mapmatrixzeros(size_map):
 
@@ -139,6 +164,8 @@ def mapmatrixzeros(size_map):
     return map_matrix
 
 def manualmapcreate(size_map,namemap, tiles_dictionary):
+
+    global map_matrix
 
     map_matrix = mapmatrixzeros(size_map)
 
@@ -172,10 +199,10 @@ def manualmapcreate(size_map,namemap, tiles_dictionary):
 
     for i in range(tiles_x):
         for j in range(tiles_y):
-            
-            tile_button = Button(text={map_matrix[i][j].item()},
-                                #  command=get_coordinates,
-                                 image=empty_tile)
+            global tile_button
+            tile_button = Button(text=f"{i} {j}",
+                                image=empty_tile)
+            tile_button.bind("<Button-1>", lambda event: choosetileonmatrix(event))
             
             tile_button.grid(row=i, column=j)
             tile_button.image = empty_tile
