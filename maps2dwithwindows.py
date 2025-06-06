@@ -11,76 +11,76 @@ global tiles_dictionary
 
 tiles_dictionary = {
     "path": {
-        "path1": ['map_assets/grasstype2road3.png', 1],
-        "path2": ['map_assets/grasstype2roadturn1.png', 2],
-        "path3": ['map_assets/grasstype2roadturn4.png', 3],
-        "path4": ['map_assets/pathmud.png', 4],
-        "path5": ['map_assets/pathmud2.png', 5],
-        "path6": ['map_assets/pathmud3.png', 6],
-        "path7": ['map_assets/pathmud4.png', 7]
+        "1": 'map_assets/grasstype2road3.png',
+        "2": 'map_assets/grasstype2roadturn1.png',
+        "3": 'map_assets/grasstype2roadturn4.png',
+        "4": 'map_assets/pathmud.png',
+        "5": 'map_assets/pathmud2.png',
+        "6": 'map_assets/pathmud3.png',
+        "7": 'map_assets/pathmud4.png'
     },
     "bushes": {
-        'bushes1': ['map_assets/grass1.png', 8],
-        'bushes2': ['map_assets/grassandbushes1.png', 9],
-        'bushes3': ['map_assets/grassandbushes3.png', 10],
-        'bushes4': ['map_assets/grassandbushes4.png', 11],
-        'bushes5': ['map_assets/grasswithflower.png', 12],
-        'bushes6': ['map_assets/pathmudhorizontaledge.png', 13],
-        'bushes7': ['map_assets/pathturndown.png', 14],
-        'bushes8': ['map_assets/pathturninner1.png', 15]
+        '8': 'map_assets/grass1.png',
+        '9': 'map_assets/grassandbushes1.png',
+        '10': 'map_assets/grassandbushes3.png',
+        '11': 'map_assets/grassandbushes4.png',
+        '12': 'map_assets/grasswithflower.png',
+        '13': 'map_assets/pathmudhorizontaledge.png',
+        '14': 'map_assets/pathturndown.png',
+        '15': 'map_assets/pathturninner1.png'
 
     },
     "water": {
-        'water1': ['map_assets/water1.png', 16],
-        'water2': ['map_assets/water2.png', 17],
-        'water3': ['map_assets/water3.png', 18],
-        'water4': ['map_assets/waterbushes1.png', 19],
-        'water5': ['map_assets/waterbushes2.png', 20],
-        'water6': ['map_assets/waterbushes3.png', 21],
-        'water7': ['map_assets/waterbushes4.png', 22],
-        'water8': ['map_assets/waterbushes5.png', 23],
-        'water9': ['map_assets/waterbushes6.png', 24],
-        'water10': ['map_assets/waterbushes7.png', 25],
-        'water11': ['map_assets/waterbushes8.png', 26],
-        'water12': ['map_assets/watergrass1.png', 27],
-        'water13': ['map_assets/watergrass2.png', 28],
-        'water14': ['map_assets/watergrass3.png', 29],
-        'water15': ['map_assets/watergrass4.png', 30],
-        'water16': ['map_assets/watergrass5.png', 31],
-        'water17': ['map_assets/watergrass6.png', 32],
-        'water18': ['map_assets/watergrass7.png', 33], 
-        'water19': ['map_assets/watergrass8.png', 34],
-        'water20': ['map_assets/waterpath1.png', 35],
-        'water21': ['map_assets/waterpath2.png', 36],
-        'water22': ['map_assets/waterpath3.png', 37],
-        'water23': ['map_assets/waterpath4.png', 38],
-        'water24': ['map_assets/waterpath5.png', 39],
-        'water25': ['map_assets/waterpath6.png', 40]
+        '16': 'map_assets/water1.png',
+        '17': 'map_assets/water2.png',
+        '18': 'map_assets/water3.png',
+        '19': 'map_assets/waterbushes1.png',
+        '20': 'map_assets/waterbushes2.png',
+        '21': 'map_assets/waterbushes3.png',
+        '22': 'map_assets/waterbushes4.png',
+        '23': 'map_assets/waterbushes5.png',
+        '24': 'map_assets/waterbushes6.png',
+        '25': 'map_assets/waterbushes7.png',
+        '26': 'map_assets/waterbushes8.png',
+        '27': 'map_assets/watergrass1.png',
+        '28': 'map_assets/watergrass2.png',
+        '29': 'map_assets/watergrass3.png',
+        '30': 'map_assets/watergrass4.png',
+        '31': 'map_assets/watergrass5.png',
+        '32': 'map_assets/watergrass6.png',
+        '33': 'map_assets/watergrass7.png', 
+        '34': 'map_assets/watergrass8.png',
+        '35': 'map_assets/waterpath1.png',
+        '36': 'map_assets/waterpath2.png',
+        '37': 'map_assets/waterpath3.png',
+        '38': 'map_assets/waterpath4.png',
+        '39': 'map_assets/waterpath5.png',
+        '40': 'map_assets/waterpath6.png'
     },
     "grass": {
-        'grass1': ['map_assets/alotofgrass.png', 41], 
-        'grass2': ['map_assets/grasstype2full.png', 42],
-        'grass3': ['map_assets/grasstype2road2.png', 43],
-        'grass4': ['map_assets/grasstype2roadturn2.png', 44],
-        'grass5': ['map_assets/grasstype2roadturn3.png', 45],
-        'grass6': ['map_assets/grasstype2roadturn3.png', 46]
+        '41': 'map_assets/alotofgrass.png',
+        '42': 'map_assets/grasstype2full.png',
+        '43': 'map_assets/grasstype2road2.png',
+        '44': 'map_assets/grasstype2roadturn2.png',
+        '45': 'map_assets/grasstype2roadturn3.png',
+        '46': 'map_assets/grasstype2roadturn3.png'
     },
     "trees": {
-        'smallbush1': ['map_assets/smallbush1.png', 48],
-        'smallbush2': ['map_assets/smallbush2.png', 49],
-        'smallbush3': ['map_assets/smallbush3.png', 50],
-        'smallbush4': ['map_assets/smallbush4.png', 51],
-        'tree1': ['map_assets/tree1.png', 52],
-        'tree2': ['map_assets/tree2.png', 53],
-        'tree3': ['map_assets/tree3.png', 54],
-        'tree4': ['map_assets/tree4.png', 55],
-        'tree5': ['map_assets/tree5.png', 56],
-        'tree6': ['map_assets/tree6.png', 57],
-        'tree7': ['map_assets/tree7.png', 58],
-        'tree8': ['map_assets/tree8.png', 59],
-        'tree9': ['map_assets/tree9.png', 60],
-        'tree10': ['map_assets/tree10.png', 61],
-        'tree11': ['map_assets/tree11.png', 62]
+        '48': 'map_assets/smallbush1.png',
+        '49': 'map_assets/smallbush2.png',
+        '50': 'map_assets/smallbush3.png',
+        '51': 'map_assets/smallbush4.png',
+        '52': 'map_assets/tree1.png',
+        '53': 'map_assets/tree2.png',
+        '54': 'map_assets/tree3.png',
+        '55': 'map_assets/tree4.png',
+        '56': 'map_assets/tree5.png',
+        '57': 'map_assets/tree6.png',
+        '58': 'map_assets/tree7.png',
+        '59': 'map_assets/tree8.png',
+        '60': 'map_assets/tree9.png',
+        '61': 'map_assets/tree10.png',
+        '62': 'map_assets/tree11.png'
     }
 }
 
@@ -105,8 +105,15 @@ def modifymap():
     except:
         error2()
 
-    # else:
-        
+    else:
+        modifymapwindow = Toplevel()
+
+        rotations = {}
+
+        for i in range(tiles_x):
+            for j in range(tiles_y):
+                if map_matrix[i][j] == 0:
+                    tile = Image.open('map_assets/empty_tile.png')
 
 
 #кнопка выбора тайла
@@ -117,8 +124,8 @@ def radiobuttonselector(dictionary, key1, window):
         user_choice_tile = IntVar()
 
         for i in dictionary[key1]:
-            icon = PhotoImage(file=dictionary[key1][i][0])
-            tilecode = dictionary[key1][i][1]
+            icon = PhotoImage(file=dictionary[key1][i])
+            tilecode = int(i)
             radiobutton = Radiobutton(window,
                                       text=tilecode,
                                   variable = user_choice_tile,
