@@ -102,6 +102,15 @@ def modifymap():
     try:
         print(type(position))
         print(type(chosentile))
+
+        temp_position = position.split()
+        temp_x = int(temp_position[0])
+        temp_y = int(temp_position[1])
+        print(temp_x, temp_y)
+
+        map_matrix[temp_x, temp_y] = chosentile
+
+        print(map_matrix)
     except:
         error2()
 
@@ -110,10 +119,49 @@ def modifymap():
 
         rotations = {}
 
+        mapfile = Image.new("RGB", (main_x, main_y))
+        print(mapfile.size)
+
         for i in range(tiles_x):
             for j in range(tiles_y):
                 if map_matrix[i][j] == 0:
                     tile = Image.open('map_assets/empty_tile.png')
+                elif str(map_matrix[i][j]) in tiles_dictionary['bushes']:
+                    tile = Image.open(tiles_dictionary['bushes'][str(map_matrix[i][j])])
+                elif str(map_matrix[i][j]) in tiles_dictionary['path']:
+                    tile = Image.open(tiles_dictionary['path'][str(map_matrix[i][j])])
+                elif str(map_matrix[i][j]) in tiles_dictionary['water']:
+                    tile = Image.open(tiles_dictionary['water'][str(map_matrix[i][j])])
+                elif str(map_matrix[i][j]) in tiles_dictionary['grass']:
+                    tile = Image.open(tiles_dictionary['grass'][str(map_matrix[i][j])])
+                elif str(map_matrix[i][j]) in tiles_dictionary['trees']:
+                    tile = Image.open(tiles_dictionary['trees'][str(map_matrix[i][j])])
+
+                if (crop_x != 0 or crop_y != 0) and (i == (tiles_x - 1) or j == (tiles_y - 1)):
+                    if j == (tiles_y - 1) and i == (tiles_x - 1):
+                        box = (0, 0, (abs(crop_x*1 - 16)), ((abs(crop_y*1 - 16))))
+                    elif j == (tiles_y - 1):
+                        box = (0, 0, crop_y, 16)
+                    elif i == (tiles_x - 1):
+                        box = (0, 0, 0, crop_x)
+                    
+                    tile = tile.crop(box)
+                
+                mapfile.paste(tile, (i*16, j*16))
+
+                #этот код почему-то начал все тайлы по краям снизу и сверху окрашивать, хотя должен только один
+                #  завтра посмотреть надо как это исправить
+
+        
+        mapfile.show()
+        
+        # tk_im_map = ImageTk.PhotoImage(mapfile)
+
+        # pict_map = Label(modifymapwindow,
+        #                  image = tk_im_map)
+        # pict_map.pack()
+
+                
 
 
 #кнопка выбора тайла
@@ -161,10 +209,15 @@ def mapmatrixzeros(size_map):
 
     #функция создающая матрицу из нулей для карты
 
-    global tiles_x, tiles_y
+    global tiles_x, tiles_y, main_x, main_y, crop_x, crop_y
 
-    tiles_x = ceil(size_map[0] / 16)
-    tiles_y = ceil(size_map[1] / 16)
+    main_x = size_map[0]
+    main_y = size_map[1]
+
+    tiles_x = ceil(main_x / 16)
+    tiles_y = ceil(main_y / 16)
+    crop_x = main_x % 16
+    crop_y = main_y % 16
 
     map_matrix = np.zeros((tiles_x, tiles_y), dtype=int)
 
