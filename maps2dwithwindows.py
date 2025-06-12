@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 from tkinter import ttk
 import json
 import numpy as np
@@ -86,11 +86,137 @@ tiles_dictionary = {
     }
 }
 
+
+def savemap():
+
+    resultimage = createimagemap()
+
+    file_path = filedialog.askdirectory()
+
+    if file_path:
+        resultimage.save(f"{file_path}/{namemap}.png")
+
+        data_maps = {
+        'map_matrix': map_matrix.tolist(),
+        'rotate': rotations
+        
+    }
+    # записываем данные в json-файл
+
+        try:
+            with open("map_matrixes.json", "r") as f:
+                data = json.load(f)
+
+        except FileNotFoundError:
+            data =  {}
+
+        data[namemap] = data_maps
+
+        with open("map_matrixes.json", "w") as f:
+            json.dump(data, f, indent=2)
+
+        modifymapwindow.destroy()
+        manualmapwindow2.destroy()
+
+        
+    else:
+        if messagebox.askokcancel(title="Ошибка!", message="Папка для сохранения не выбрана. Выберите папку"):
+            return savemap
+        else:
+            messagebox.showerror(title="Ошибка!", message="Файл карты не сохранен")
+
+def nexttilebutton():
+    modifymapwindow.destroy()
+
+def updateimage():
+    mapimage = createimagemap()
+    tk_im_map2 = ImageTk.PhotoImage(mapimage)
+    pict_map.image = tk_im_map2
+    pict_map.config(image=tk_im_map2)
+
+def tilerotation1():
+    rotations[position] = 90
+    print(rotations)
+    updateimage()
+
+def tilerotation2():
+    rotations[position] = 180
+    updateimage()
+ 
+def tilerotation3():
+    rotations[position] = 270
+    updateimage()
+    
+def tilerotation4():
+    if position in rotations:
+        del rotations[position]
+    updateimage()
+  
+def createimagemap():
+                 
+    mapfile = Image.new("RGB", (main_y, main_x))
+    print(mapfile.size)
+
+    for i in range(tiles_x):
+        for j in range(tiles_y):
+
+            strposition = str(i) + " " + str(j)
+            print(strposition)
+
+            if map_matrix[i][j] == 0:
+                tile = Image.open('map_assets/empty_tile.png')
+            elif str(map_matrix[i][j]) in tiles_dictionary['bushes']:
+                tile = Image.open(tiles_dictionary['bushes'][str(map_matrix[i][j])])
+            elif str(map_matrix[i][j]) in tiles_dictionary['path']:
+                tile = Image.open(tiles_dictionary['path'][str(map_matrix[i][j])])
+            elif str(map_matrix[i][j]) in tiles_dictionary['water']:
+                tile = Image.open(tiles_dictionary['water'][str(map_matrix[i][j])])
+            elif str(map_matrix[i][j]) in tiles_dictionary['grass']:
+                tile = Image.open(tiles_dictionary['grass'][str(map_matrix[i][j])])
+            elif str(map_matrix[i][j]) in tiles_dictionary['trees']:
+                tile = Image.open(tiles_dictionary['trees'][str(map_matrix[i][j])])
+
+            if (crop_x != 0 or crop_y != 0) and (i == (tiles_x - 1) or j == (tiles_y - 1)):
+            
+                if j == (tiles_y - 1) and i == (tiles_x - 1):
+                    crop_x_fin = 16
+                    crop_y_fin = 16
+                    if crop_x>0:
+                        crop_x_fin = crop_x
+                    if crop_y>0:
+                        crop_y_fin = crop_y
+                    box = (0, 0,crop_y_fin,crop_x_fin)
+
+                elif i == (tiles_x - 1):
+                    crop_x_fin = 16
+                    if crop_x>0:
+                        crop_x_fin = crop_x
+                    box = (0, 0, 16, crop_x_fin)
+                    
+                elif j == (tiles_y - 1):
+                    crop_y_fin = 16
+                    if crop_y>0:
+                        crop_y_fin = crop_y
+                    box = (0, 0, crop_y_fin, 16)          
+            
+                tile = tile.crop(box)
+
+            if strposition in rotations:
+                anglenum = rotations[strposition]
+                tile = tile.rotate(anglenum)
+
+            mapfile.paste(tile, (0+j*16, 0+i*16))
+
+    # mapfile.show()
+
+    return mapfile
+
 #кнопка выбора тайла на матрице
 
 def choosetileonmatrix(event):
     global position
     position = event.widget.cget("text")
+
     
 #кнопка выбора тайла с картинкой
 def choosetile(t):
@@ -116,40 +242,15 @@ def modifymap():
         error2()
 
     else:
+        global modifymapwindow
 
         modifymapwindow = Toplevel()
 
-        mapfile = Image.new("RGB", (main_x, main_y))
-        print(mapfile.size)
+        mapfile = createimagemap()
 
-        for i in range(tiles_x):
-            for j in range(tiles_y):
-                if map_matrix[i][j] == 0:
-                    tile = Image.open('map_assets/empty_tile.png')
-                elif str(map_matrix[i][j]) in tiles_dictionary['bushes']:
-                    tile = Image.open(tiles_dictionary['bushes'][str(map_matrix[i][j])])
-                elif str(map_matrix[i][j]) in tiles_dictionary['path']:
-                    tile = Image.open(tiles_dictionary['path'][str(map_matrix[i][j])])
-                elif str(map_matrix[i][j]) in tiles_dictionary['water']:
-                    tile = Image.open(tiles_dictionary['water'][str(map_matrix[i][j])])
-                elif str(map_matrix[i][j]) in tiles_dictionary['grass']:
-                    tile = Image.open(tiles_dictionary['grass'][str(map_matrix[i][j])])
-                elif str(map_matrix[i][j]) in tiles_dictionary['trees']:
-                    tile = Image.open(tiles_dictionary['trees'][str(map_matrix[i][j])])
-
-                if (crop_x != 0 or crop_y != 0) and (i == (tiles_x - 1) or j == (tiles_y - 1)):
-                    if j == (tiles_y - 1) and i == (tiles_x - 1):
-                        box = (0, 0, (abs(crop_x*1 - 16)), ((abs(crop_y*1 - 16))))
-                    elif j == (tiles_y - 1):
-                        box = (0, 0, crop_y, 16)
-                    elif i == (tiles_x - 1):
-                        box = (0, 0, 16, crop_x)
-                    
-                    tile = tile.crop(box)
-                
-                mapfile.paste(tile, (0+j*16, 0+i*16))
-        
         tk_im_map = ImageTk.PhotoImage(mapfile)
+
+        global pict_map
 
         pict_map = Label(modifymapwindow,
                          image = tk_im_map)
@@ -158,13 +259,16 @@ def modifymap():
         rotatebutton90 = Button(modifymapwindow,
                                      text="Повернуть текущий тайл на 90 градусов",
                                      font = ("Pixelify Sans",20),
+                                    command = tilerotation1,
                                      pady=10,
-                                     padx=10)
+                                     padx=10
+                                     )
         rotatebutton90.pack()
 
         rotatebutton180 = Button(modifymapwindow,
                                      text="Повернуть текущий тайл на 180 градусов",
                                      font = ("Pixelify Sans",20),
+                                     command = tilerotation2,
                                      pady=10,
                                      padx=10)
         rotatebutton180.pack()
@@ -172,6 +276,7 @@ def modifymap():
         rotatebutton270 = Button(modifymapwindow,
                                     text="Повернуть текущий тайл на 270 градусов",
                                     font = ("Pixelify Sans",20),
+                                    command = tilerotation3,
                                     pady=10,
                                     padx=10)
         rotatebutton270.pack()
@@ -179,13 +284,23 @@ def modifymap():
         rotatebutton360 = Button(modifymapwindow,
                                     text="Повернуть текущий тайл в изначальное положение",
                                     font = ("Pixelify Sans",20),
+                                    command = tilerotation4,
                                     pady=10,
                                     padx=10)
         rotatebutton360.pack()
 
+        nexttile = Button(modifymapwindow,
+                               text="Изменить другой тайл",
+                               font = ("Pixelify Sans",20),
+                               command = nexttilebutton,
+                               pady=10,
+                               padx=10)
+        nexttile.pack()
+
         savemapbutton = Button(modifymapwindow,
                                text="Сохранить карту и завершить работу",
                                font = ("Pixelify Sans",20),
+                               command=savemap,
                                pady=10,
                                padx=10)
         savemapbutton.pack()
@@ -238,8 +353,8 @@ def mapmatrixzeros(size_map):
 
     global tiles_x, tiles_y, main_x, main_y, crop_x, crop_y
 
-    main_x = size_map[0]
-    main_y = size_map[1]
+    main_y = size_map[0]
+    main_x = size_map[1]
 
     tiles_x = ceil(main_x / 16)
     tiles_y = ceil(main_y / 16)
@@ -250,28 +365,11 @@ def mapmatrixzeros(size_map):
 
     return map_matrix
 
-def manualmapcreate(size_map,namemap, tiles_dictionary):
+def manualmapcreate(size_map, tiles_dictionary):
 
-    global map_matrix
+    global map_matrix, manualmapwindow2
 
     map_matrix = mapmatrixzeros(size_map)
-
-    # data_maps ={
-    #     namemap: map_matrix.tolist()
-    # }
-    #записываем данные в json-файл
-
-    # try:
-    #     with open("map_matrixes.json", "r") as f:
-    #         data = json.load(f)
-
-    # except FileNotFoundError:
-    #     data = []
-
-    # data.append(data_maps)
-
-    # with open("map_matrixes.json", "w") as f:
-    #     json.dump(data, f, indent=2)
 
     manualmapwindow2 = Tk()
     #новое окно с непосредственно настройкой карты
@@ -353,7 +451,7 @@ def submitsettingsbutton():
         if not acceptname:
             error1()
         else:
-            manualmapcreate(size_map,namemap,tiles_dictionary)
+            manualmapcreate(size_map,tiles_dictionary)
                 
 
 def manualnewmap():
