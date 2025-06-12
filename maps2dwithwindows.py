@@ -7,7 +7,9 @@ from PIL import Image, ImageTk
 from math import ceil
 
 #ссылки на файлы
-global tiles_dictionary
+global tiles_dictionary, rotations
+
+rotations = {}
 
 tiles_dictionary = {
     "path": {
@@ -97,7 +99,6 @@ def choosetile(t):
     print(chosentile)
 
 def modifymap():
-    print("!")
 
     try:
         print(type(position))
@@ -115,9 +116,8 @@ def modifymap():
         error2()
 
     else:
-        modifymapwindow = Toplevel()
 
-        rotations = {}
+        modifymapwindow = Toplevel()
 
         mapfile = Image.new("RGB", (main_x, main_y))
         print(mapfile.size)
@@ -143,27 +143,55 @@ def modifymap():
                     elif j == (tiles_y - 1):
                         box = (0, 0, crop_y, 16)
                     elif i == (tiles_x - 1):
-                        box = (0, 0, 0, crop_x)
+                        box = (0, 0, 16, crop_x)
                     
                     tile = tile.crop(box)
                 
-                mapfile.paste(tile, (i*16, j*16))
-
-                #этот код почему-то начал все тайлы по краям снизу и сверху окрашивать, хотя должен только один
-                #  завтра посмотреть надо как это исправить
-
+                mapfile.paste(tile, (0+j*16, 0+i*16))
         
-        mapfile.show()
-        
-        # tk_im_map = ImageTk.PhotoImage(mapfile)
+        tk_im_map = ImageTk.PhotoImage(mapfile)
 
-        # pict_map = Label(modifymapwindow,
-        #                  image = tk_im_map)
-        # pict_map.pack()
+        pict_map = Label(modifymapwindow,
+                         image = tk_im_map)
+        pict_map.pack()
 
+        rotatebutton90 = Button(modifymapwindow,
+                                     text="Повернуть текущий тайл на 90 градусов",
+                                     font = ("Pixelify Sans",20),
+                                     pady=10,
+                                     padx=10)
+        rotatebutton90.pack()
+
+        rotatebutton180 = Button(modifymapwindow,
+                                     text="Повернуть текущий тайл на 180 градусов",
+                                     font = ("Pixelify Sans",20),
+                                     pady=10,
+                                     padx=10)
+        rotatebutton180.pack()
+
+        rotatebutton270 = Button(modifymapwindow,
+                                    text="Повернуть текущий тайл на 270 градусов",
+                                    font = ("Pixelify Sans",20),
+                                    pady=10,
+                                    padx=10)
+        rotatebutton270.pack()
+
+        rotatebutton360 = Button(modifymapwindow,
+                                    text="Повернуть текущий тайл в изначальное положение",
+                                    font = ("Pixelify Sans",20),
+                                    pady=10,
+                                    padx=10)
+        rotatebutton360.pack()
+
+        savemapbutton = Button(modifymapwindow,
+                               text="Сохранить карту и завершить работу",
+                               font = ("Pixelify Sans",20),
+                               pady=10,
+                               padx=10)
+        savemapbutton.pack()
+
+        modifymapwindow.mainloop()
                 
-
-
 #кнопка выбора тайла
 def radiobuttonselector(dictionary, key1, window):
     try:
@@ -182,7 +210,6 @@ def radiobuttonselector(dictionary, key1, window):
                                   image=icon)
             
             radiobutton.pack(anchor=W)
-            # radiobutton.bind("<Button>", lambda event: print(event.widget.cget("text")))
             radiobutton.image = icon
     
     except Exception as e:
@@ -305,6 +332,7 @@ def manualmapcreate(size_map,namemap, tiles_dictionary):
 def submitsettingsbutton():
     #проверка формата введенных данных
     sizeinput = sizemapentry.get()
+    global namemap
     namemap = nameofmap.get()
     try:
         size_map = sizeinput.split("x")
