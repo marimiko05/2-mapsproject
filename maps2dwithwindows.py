@@ -136,7 +136,6 @@ def updateimage():
 
 def tilerotation1():
     rotations[position] = 90
-    print(rotations)
     updateimage()
 
 def tilerotation2():
@@ -155,13 +154,11 @@ def tilerotation4():
 def createimagemap():
                  
     mapfile = Image.new("RGB", (main_y, main_x))
-    print(mapfile.size)
 
     for i in range(tiles_x):
         for j in range(tiles_y):
 
             strposition = str(i) + " " + str(j)
-            print(strposition)
 
             if map_matrix[i][j] == 0:
                 tile = Image.open('map_assets/empty_tile.png')
@@ -222,22 +219,17 @@ def choosetileonmatrix(event):
 def choosetile(t):
     global chosentile
     chosentile = t
-    print(chosentile)
 
 def modifymap():
 
     try:
-        print(type(position))
-        print(type(chosentile))
 
         temp_position = position.split()
         temp_x = int(temp_position[0])
         temp_y = int(temp_position[1])
-        print(temp_x, temp_y)
 
         map_matrix[temp_x, temp_y] = chosentile
 
-        print(map_matrix)
     except:
         error2()
 
