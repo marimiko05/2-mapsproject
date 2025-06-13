@@ -88,6 +88,7 @@ tiles_dictionary = {
 
 
 def savemap():
+    #функция на кнопке сохранения карты
 
     resultimage = createimagemap()
 
@@ -126,9 +127,11 @@ def savemap():
             messagebox.showerror(title="Ошибка!", message="Файл карты не сохранен")
 
 def nexttilebutton():
+    #закрытие окна для кнопки "Выбрать следующий тайл"
     modifymapwindow.destroy()
 
 def updateimage():
+    #Обновление картинки в меню превью и настройки тайла
     mapimage = createimagemap()
     tk_im_map2 = ImageTk.PhotoImage(mapimage)
     pict_map.image = tk_im_map2
@@ -221,6 +224,7 @@ def choosetile(t):
     chosentile = t
 
 def modifymap():
+    #меню настроек тайла и сохранения карты
 
     try:
 
@@ -299,7 +303,7 @@ def modifymap():
 
         modifymapwindow.mainloop()
                 
-#кнопка выбора тайла
+#кнопка выбора тайла по позиции
 def radiobuttonselector(dictionary, key1, window):
     try:
         global user_choice_tile
@@ -444,7 +448,68 @@ def submitsettingsbutton():
             error1()
         else:
             manualmapcreate(size_map,tiles_dictionary)
-                
+            
+def savenameofmap(t):
+    #сохраняем название карты, которую будем менять, в переменную
+    global selected_map
+    selected_map = t
+
+def editmap2():
+    #меняем карту и настраиваем
+    print(selected_map)
+
+    with open("map_matrixes.json", "r") as f:
+            data = json.load(f)
+
+    mapconfigurations = data[selected_map]
+
+    map_matrix = mapconfigurations['map_matrix']
+    rotations = mapconfigurations['rotate']
+
+    print(map_matrix)
+    print(rotations)
+
+
+def editmap():
+    #меню выбора уже существующей карты для редактирования
+
+    editmapwindow = Tk()
+
+
+    text1 = Label(editmapwindow,
+                  text = "Выберите карту, которую хотите отредактировать",
+                  font = ("Pixelify Sans",30),
+                  pady=10)
+    text1.pack()
+
+    try:
+
+        with open("map_matrixes.json", "r") as f:
+            data = json.load(f)
+
+        listofmapnames = list(data.keys())
+        selectedmap = StringVar()
+
+        combobox1 = ttk.Combobox(editmapwindow, 
+                                 textvariable=selectedmap
+                                )
+        combobox1['values'] = listofmapnames
+        combobox1.pack()
+        combobox1.bind('<<ComboboxSelected>>', lambda event: savenameofmap(combobox1.get()))
+
+        button1 = Button(editmapwindow,
+                         text = 'Выбрать карту',
+                         font = ("Pixelify Sans",20),
+                         command = editmap2,
+                         pady=10)
+        
+        button1.pack()
+
+    except Exception as e:
+        print(e)
+
+    editmapwindow.mainloop()
+                    
 
 def manualnewmap():
     #окно для настроек ручного режима
@@ -526,7 +591,7 @@ buttonrandomgen.pack()
 #редактирование уже существующей карты
 buttoneditmap = Button(mainmenuwindow,
                        text = "Редактирование карты",
-                       #command=editmap,
+                       command=editmap,
                        font = ("Pixelify Sans",40),
                        state = ACTIVE,
                        compound = 'left').pack()
