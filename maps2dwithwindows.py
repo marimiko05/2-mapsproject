@@ -99,7 +99,8 @@ def savemap():
 
         data_maps = {
         'map_matrix': map_matrix.tolist(),
-        'rotate': rotations
+        'rotate': rotations,
+        'size': [main_x, main_y]
         
     }
     # записываем данные в json-файл
@@ -116,8 +117,11 @@ def savemap():
         with open("map_matrixes.json", "w") as f:
             json.dump(data, f, indent=2)
 
-        modifymapwindow.destroy()
-        manualmapwindow2.destroy()
+        if modifymapwindow.winfo_exists():
+            modifymapwindow.destroy()
+
+        if manualmapwindow2.winfo_exists():
+            manualmapwindow2.destroy()
 
         
     else:
@@ -365,12 +369,14 @@ def manualmapcreate(size_map, tiles_dictionary):
 
     global map_matrix, manualmapwindow2
 
+    if manualmapwindow.winfo_exists():
+        manualmapwindow.destroy()
+
     map_matrix = mapmatrixzeros(size_map)
 
     manualmapwindow2 = Tk()
     #новое окно с непосредственно настройкой карты
 
-    manualmapwindow.destroy()
     #матрица с пустыми тайлами
 
     frame = Frame(manualmapwindow2)
@@ -451,8 +457,9 @@ def submitsettingsbutton():
             
 def savenameofmap(t):
     #сохраняем название карты, которую будем менять, в переменную
-    global selected_map
+    global selected_map, namemap
     selected_map = t
+    namemap = t
 
 def editmap2():
     #меняем карту и настраиваем
@@ -463,18 +470,90 @@ def editmap2():
 
     mapconfigurations = data[selected_map]
 
+    global map_matrix, tiles_x, tiles_y, manualmapwindow2, main_x, main_y, crop_x, crop_y
+
     map_matrix = mapconfigurations['map_matrix']
+    map_matrix = np.array(map_matrix)
     rotations = mapconfigurations['rotate']
+    size = mapconfigurations['size']
+    main_x = int(size[0])
+    main_y = int(size[1])
+
+    sizes1 = map_matrix.shape
+    tiles_x =sizes1[0]
+    tiles_y =sizes1[1]
+    crop_x = main_x % 16
+    crop_y = main_y % 16
 
     print(map_matrix)
     print(rotations)
 
+    if mainmenuwindow.winfo_exists():
+        mainmenuwindow.destroy()
+
+    if editmapwindow.winfo_exists():
+        editmapwindow.destroy()
+
+    manualmapwindow2 = Tk()
+
+    frame = Frame(manualmapwindow2)
+    frame.place(x=0,y=0)
+    
+    empty_tile = PhotoImage(file='map_assets/empty_tile.png')
+
+    for i in range(tiles_x):
+        for j in range(tiles_y):
+            global tile_button1
+            tile_button1 = Button(text=f"{i} {j}",
+                                image=empty_tile)
+            tile_button1.bind("<Button-1>", lambda event: choosetileonmatrix(event))
+            
+            tile_button1.grid(row=i, column=j)
+            tile_button1.image = empty_tile
+
+    manualinstructions = Label(manualmapwindow2,
+                               text = "Нажмите на тайл выше и выберите изображение внизу",
+                               font = ("Pixelify Sans",30))
+
+    if (tiles_y*16) >= 320:
+        manualinstructions.grid(row = tiles_x+1, column = 0, columnspan=(tiles_y*16-49), sticky = 'w')
+
+    else:
+        manualinstructions.grid(row = tiles_x+1, column = 0, columnspan=320, sticky = 'w')
+
+    #меню выбора тайла
+    choosetypeoftile = ttk.Notebook(manualmapwindow2)
+
+    pathtiles = Frame(choosetypeoftile)
+    bushestiles = Frame(choosetypeoftile)
+    watertiles = Frame(choosetypeoftile)
+    grasstiles = Frame(choosetypeoftile)
+    treestiles = Frame(choosetypeoftile)
+    
+    choosetypeoftile.add(pathtiles, text="Дорога")
+    choosetypeoftile.add(bushestiles, text="Заросли")
+    choosetypeoftile.add(watertiles, text="Вода")
+    choosetypeoftile.add(grasstiles, text="Трава")
+    choosetypeoftile.add(treestiles, text="Деревья")
+
+    choosetypeoftile.grid(row=tiles_x + 2, column = 0, columnspan= 320, sticky = 'w')
+
+    radiobuttonselector(tiles_dictionary,'path',pathtiles)
+    radiobuttonselector(tiles_dictionary,'bushes',bushestiles)
+    radiobuttonselector(tiles_dictionary,'water', watertiles)
+    radiobuttonselector(tiles_dictionary,'grass', grasstiles)
+    radiobuttonselector(tiles_dictionary,'trees', treestiles)
+
+    manualmapwindow2.mainloop()
+
+    
 
 def editmap():
     #меню выбора уже существующей карты для редактирования
 
-    editmapwindow = Tk()
+    global editmapwindow
 
+    editmapwindow = Tk()
 
     text1 = Label(editmapwindow,
                   text = "Выберите карту, которую хотите отредактировать",
