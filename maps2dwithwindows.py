@@ -588,6 +588,34 @@ def editmap():
         print(e)
 
     editmapwindow.mainloop()
+
+def randomnewmap():
+
+    if mainmenuwindow.winfo_exists():
+        mainmenuwindow.destroy()
+
+    randomnewwindow = Tk()
+
+    instructions1 = Label(randomnewwindow,
+                          text = "Введите размер карты в формате NxN, где N - натуральное число",
+                          font = ("Pixelify Sans",30)).pack(pady=5)
+    
+    sizemapentry = Entry(randomnewwindow,
+                         font = ("Pixelify Sans",30),
+                         )
+    sizemapentry.pack(pady=5)
+
+    instructions2 = Label(randomnewwindow,
+                          text = "Введите название карты на латинице без пробелов",
+                          font = ("Pixelify Sans",30)).pack(pady=5)
+    
+    nameofmap = Entry(randomnewwindow,
+                         font = ("Pixelify Sans",30),
+                         )
+    nameofmap.pack(pady=5)
+
+    randomnewwindow.mainloop()
+
                     
 
 def manualnewmap():
@@ -660,7 +688,7 @@ buttonmanualgen.pack()
 #кнопка открывает меню создания рандомной карты
 buttonrandomgen = Button(mainmenuwindow,
                          text = "Автоматическое создание карты",
-                         #command=randomnewmap,
+                         command=randomnewmap,
                          font = ("Pixelify Sans",40),
                          state = ACTIVE,
                          compound = 'left'
